@@ -20,6 +20,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 sh 'dotnet publish SimpleWebApi --no-restore -o published'
+                docker.build("simple-dotnet-webapp:${env.BUILD_ID}")
             }
             post {
                 success {

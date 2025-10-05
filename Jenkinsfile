@@ -32,10 +32,11 @@ pipeline {
                 
                 script {
                     def image_tag = null
+                    def registry_url = null
                     switch(params.BUILD_ENV){
                         case 'Dev':
-                            registry = '192.168.1.55'                         
-                            image_tag = "${registry}/simple-dotnet-webapp:${env.BUILD_ID}-${params.BUILD_ENV.toLowerCase()}"
+                            registry_url = '192.168.1.55'                         
+                            image_tag = "${registry_url}/simple-dotnet-webapp:${env.BUILD_ID}-${params.BUILD_ENV.toLowerCase()}"
                     }
                     
                     if(!image_tag){

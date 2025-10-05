@@ -23,7 +23,7 @@ pipeline {
         stage('Deliver') {
             environment{
                 DOCKER_REGISTRY = '192.168.1.55'
-            }
+            }            
             steps {
                  echo "Building docker image for ${params.BUILD_ENV} environment."
                  echo "Registry is ${env.DOCKER_REGISTRY}"
@@ -31,8 +31,20 @@ pipeline {
                 sh 'dotnet publish SimpleWebApi --no-restore -o published'
                 
                 script {
-                    def builtImage = docker.build("${env.DOCKER_REGISTRY}/simple-dotnet-webapp:${env.BUILD_ID}")
-                    builtImage.push()
+                    def image_tag = null
+                    switch(params.BUILD_ENV){
+                        case 'Dev':
+                            registry = '192.168.1.55'                         
+                            image_tag = "${registry}/simple-dotnet-webapp:${env.BUILD_ID}-${params.BUILD_ENV.toLowerCase()}"
+                    }
+                    
+                    if(!image_tag){
+                        def builtImage = docker.build(image_tag)
+                        builtImage.push()
+                    }
+                    else{
+                        echo "Failed to build image tag for pushing the docker image"
+                    }
                 }
             }
             post {

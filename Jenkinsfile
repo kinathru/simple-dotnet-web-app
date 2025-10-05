@@ -22,7 +22,8 @@ pipeline {
                 sh 'dotnet publish SimpleWebApi --no-restore -o published'
                 
                 script {
-                    docker.build("simple-dotnet-webapp:${env.BUILD_ID}")
+                    def builtImage = docker.build("192.168.1.55/simple-dotnet-webapp:${env.BUILD_ID}")
+                    builtImage.push()
                 }
             }
             post {

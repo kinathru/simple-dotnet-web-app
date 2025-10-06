@@ -44,7 +44,7 @@ pipeline {
                         builtImage.push()
                     }
                     else{
-                        echo "Failed to build image tag for pushing the docker image"
+                        error("Failed to build image tag for pushing the docker image")
                     }
                 }
             }

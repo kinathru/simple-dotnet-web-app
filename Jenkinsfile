@@ -39,7 +39,7 @@ pipeline {
                             image_tag = "${registry_url}/simple-dotnet-webapp:${env.BUILD_ID}-${params.BUILD_ENV.toLowerCase()}"
                     }
                     
-                    if(!image_tag){
+                    if(image_tag){
                         def builtImage = docker.build(image_tag)
                         builtImage.push()
                     }
